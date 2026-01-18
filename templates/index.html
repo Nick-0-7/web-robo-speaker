@@ -1,1 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Robo Speaker</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #0f172a;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .box {
+            background: #020617;
+            padding: 30px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>🤖 RoboSpeaker</h2>
+        <input id="text" placeholder="Type something..." />
+        <button onclick="speak()">Speak</button>
+        <p id="status"></p>
+    </div>
+
+<script>
+function speak() {
+    const text = document.getElementById("text").value;
+    fetch("/speak", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text })
+    }).then(res => res.json())
+      .then(data => {
+    const status = document.getElementById("status");
+    const input = document.getElementById("text");
+
+    if (data.status === "ok") {
+        status.innerText = "Speaking...";
+        input.value = "";   // ✅ CLEAR TEXT
+    } else {
+        status.innerText = data.msg;
+    }
+});
+
+}
+</script>
+</body>
+</html>
 
